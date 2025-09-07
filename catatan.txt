@@ -1,0 +1,8 @@
+(myenv) D:\belajar_dataset>.\myenv\Scripts\activate
+(myenv) D:\belajar_dataset>python -m venv myenv
+
+
+# Menampilkan ringkasan informasi dari dataset
+train.info()
+# Menampilkan statistik deskriptif dari dataset
+train.describe(include="all")
