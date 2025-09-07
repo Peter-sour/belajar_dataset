@@ -6,3 +6,20 @@
 train.info()
 # Menampilkan statistik deskriptif dari dataset
 train.describe(include="all")
+# Memeriksa jumlah nilai yang hilang di setiap kolom
+missing_values = train.isnull().sum()
+missing_values[missing_values > 0]
+
+# Contoh mengisi nilai yang hilang dengan median untuk kolom numerik
+numeric_features = train[less].select_dtypes(include=['number']).columns
+train[numeric_features] = train[numeric_features].fillna(train[numeric_features].median())
+
+# Contoh mengisi nilai yang hilang dengan mode untuk kolom kategori
+kategorical_features = train[less].select_dtypes(include=['object']).columns
+
+for column in kategorical_features:
+    train[column] = train[column].fillna(train[column].mode()[0])
+
+
+# Menghapus kolom dengan terlalu banyak nilai yang hilang
+df = train.drop(columns=over)
