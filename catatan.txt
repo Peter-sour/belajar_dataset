@@ -152,3 +152,13 @@ correlation_matrix = df_lencoder.corr()
 sns.heatmap(correlation_matrix, annot=False, cmap='coolwarm', vmin=-1, vmax=1)
 plt.title('Correlation Matrix')
 plt.show()
+# Visualisasi korelasi antar variabel numerik
+plt.figure(figsize=(12, 10))
+correlation_matrix = df_lencoder.corr()
+
+sns.heatmap(correlation_matrix, annot=False, cmap='coolwarm', vmin=-1, vmax=1)
+plt.title('Correlation Matrix')
+plt.show()
+# Memisahkan fitur (X) dan target (y)
+X = df_lencoder.drop(columns=['SalePrice'])
+y = df_lencoder['SalePrice'] 
