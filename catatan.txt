@@ -83,3 +83,72 @@ missing_data = pd.DataFrame({
 }).sort_values(by='Missing Values', ascending=False)
 
 missing_data[missing_data['Missing Values'] > 0]  # Menampilkan kolom dengan missing values
+
+# Menghitung jumlah variabel
+num_vars = df_lencoder.shape[1]
+
+# Menentukan jumlah baris dan kolom untuk grid subplot
+n_cols = 4  # Jumlah kolom yang diinginkan
+n_rows = -(-num_vars // n_cols)  # Ceiling division untuk menentukan jumlah baris
+
+# Membuat subplot
+fig, axes = plt.subplots(n_rows, n_cols, figsize=(20, n_rows * 4))
+
+# Flatten axes array untuk memudahkan iterasi jika diperlukan
+axes = axes.flatten()
+
+# Plot setiap variabel
+for i, column in enumerate(df_lencoder.columns):
+    df_lencoder[column].hist(ax=axes[i], bins=20, edgecolor='black')
+    axes[i].set_title(column)
+    axes[i].set_xlabel('Value')
+    axes[i].set_ylabel('Frequency')
+
+# Menghapus subplot yang tidak terpakai (jika ada)
+for j in range(i + 1, len(axes)):
+    fig.delaxes(axes[j])
+
+# Menyesuaikan layout agar lebih rapi
+plt.tight_layout()
+plt.show()
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+
+# --- Contoh inisialisasi dataset ---
+data = {
+    'OverallQual': [5, 7, 6, 8, 7, 7, 6],
+    'YearBuilt': [2000, 1995, 2010, 1980, 1975, 2005, 2015],
+    'LotArea': [8500, 9600, 11250, 9550, 14260, 14115, 10084],
+    'SaleType': ['WD', 'New', 'WD', 'COD', 'WD', 'New', 'WD'],
+    'SaleCondition': ['Normal', 'Abnorml', 'Normal', 'Partial', 'Normal', 'Normal', 'Abnorml']
+}
+df = pd.DataFrame(data)
+
+# --- Encode kolom kategorikal ---
+le = LabelEncoder()
+df_lencoder = df.copy()
+for col in df.select_dtypes(include=['object']).columns:
+    df_lencoder[col] = le.fit_transform(df[col])
+
+# --- Visualisasi distribusi data untuk beberapa kolom ---
+columns_to_plot = ['OverallQual', 'YearBuilt', 'LotArea', 'SaleType', 'SaleCondition']
+
+plt.figure(figsize=(15, 10))
+for i, column in enumerate(columns_to_plot, 1):
+    plt.subplot(2, 3, i)
+    sns.histplot(df_lencoder[column], kde=True, bins=30)
+    plt.title(f'Distribution of {column}')
+    plt.xlabel(column)
+    plt.ylabel("Frequency")
+
+plt.tight_layout()
+plt.show()
+# Visualisasi korelasi antar variabel numerik
+plt.figure(figsize=(12, 10))
+correlation_matrix = df_lencoder.corr()
+
+sns.heatmap(correlation_matrix, annot=False, cmap='coolwarm', vmin=-1, vmax=1)
+plt.title('Correlation Matrix')
+plt.show()
