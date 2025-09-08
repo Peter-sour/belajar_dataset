@@ -23,3 +23,53 @@ for column in kategorical_features:
 
 # Menghapus kolom dengan terlalu banyak nilai yang hilang
 df = train.drop(columns=over)
+# Contoh mengisi nilai yang hilang dengan mode untuk kolom kategori
+kategorical_features = train[less].select_dtypes(include=['object']).columns
+
+for column in kategorical_features:
+    train[column] = train[column].fillna(train[column].mode()[0])
+# Menghapus kolom dengan terlalu banyak nilai yang hilang
+df = train.drop(columns=over)
+missing_values = df.isnull().sum()
+missing_values[missing_values > 0]
+# Contoh sederhana untuk mengidentifikasi outliers menggunakan IQR
+Q1 = df[numeric_features].quantile(0.25)
+Q3 = df[numeric_features].quantile(0.75)
+IQR = Q3 - Q1
+# Filter dataframe untuk hanya menyimpan baris yang tidak mengandung outliers pada kolom numerik
+condition = ~((df[numeric_features] < (Q1 - 1.5 * IQR)) | (df[numeric_features] > (Q3 + 1.5 * IQR))).any(axis=1)
+df_filtered_numeric = df.loc[condition, numeric_features]
+
+# Menggabungkan kembali dengan kolom kategorikal
+categorical_features = df.select_dtypes(include=['object']).columns
+df = pd.concat([df_filtered_numeric, df.loc[condition, categorical_features]], axis=1)
+from sklearn.preprocessing import StandardScaler
+
+# Standardisasi fitur numerik
+scaler = StandardScaler()
+df[numeric_features] = scaler.fit_transform(df[numeric_features])
+# Histogram Sebelum Standardisasi
+plt.figure(figsize=(12, 5))
+plt.subplot(1, 2, 1)
+sns.histplot(train[numeric_features[3]], kde=True)
+plt.title("Histogram Sebelum Standardisasi")
+# Histogram Setelah Standardisasi
+plt.subplot(1, 2, 2)
+sns.histplot(df[numeric_features[3]], kde=True)
+plt.title("Histogram Setelah Standardisasi")
+# Mengidentifikasi baris duplikat
+duplicates = df.duplicated()
+
+print("Baris duplikat:")
+print(df[duplicates])
+from sklearn.preprocessing import LabelEncoder
+
+# Inisialisasi LabelEncoder
+label_encoder = LabelEncoder()
+df_lencoder = pd.DataFrame(df)
+
+for col in category_features:
+    df_lencoder[col] = label_encoder.fit_transform(df[col])
+
+# Menampilkan hasil
+df_lencoder

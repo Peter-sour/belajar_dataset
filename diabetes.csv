@@ -199,3 +199,4 @@ PatientID,Age,Gender,BMI,BloodPressure,Insulin,Glucose,DiabetesPedigreeFunction,
 198,58,Male,29.9,128,111,139,0.86,0
 199,35,Female,26.0,117,94,125,0.62,0
 200,49,Male,37.0,153,135,163,1.51,1
+14,75,Male,40.830696402668735,120,147,134,0.246587103651673,0
