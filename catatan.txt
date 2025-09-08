@@ -73,3 +73,13 @@ for col in category_features:
 
 # Menampilkan hasil
 df_lencoder
+# Menghitung jumlah dan persentase missing values di setiap kolom
+missing_values = df_lencoder.isnull().sum()
+missing_percentage = (missing_values / len(df_lencoder)) * 100
+
+missing_data = pd.DataFrame({
+    'Missing Values': missing_values,
+    'Percentage': missing_percentage
+}).sort_values(by='Missing Values', ascending=False)
+
+missing_data[missing_data['Missing Values'] > 0]  # Menampilkan kolom dengan missing values
