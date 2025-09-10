@@ -161,4 +161,6 @@ plt.title('Correlation Matrix')
 plt.show()
 # Memisahkan fitur (X) dan target (y)
 X = df_lencoder.drop(columns=['SalePrice'])
-y = df_lencoder['SalePrice'] 
+y = df_lencoder['SalePrice']
+//===================================================//
+multiple regresion
